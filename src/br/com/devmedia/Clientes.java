@@ -2,6 +2,7 @@ package br.com.devmedia;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -33,9 +34,11 @@ public class Clientes extends HttpServlet {
 		
 		PrintWriter out = response.getWriter();
 		
-		out.println("<form>");
+		out.println("<form method='post'>");
 		out.println("Nome: <input type='text' name='txtNome'/><br/>");
-		out.println("Email: <input type='text name='txtEmail'/><br/>");
+		out.println("Email: <input type='text' name='txtEmail'/><br/>");
+		out.println("CEP: <input type='text' name='txtCep'/><br/>");
+		out.println("CPF: <input type='text' name='txtCpf'/><br/>");
 		out.println("<br/><br/>");
 		out.println("<input type='submit' value='Cadastrar'/><br/>");
 		out.println("</form>");
@@ -87,13 +90,23 @@ public class Clientes extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
 		ClienteDTO clienteValues = new ClienteDTO();
-		clienteValues.setNome("Kleber");
-		clienteValues.setEmail("kleber@email.com");
+		clienteValues.setNome(request.getParameter("txtNome"));
+		clienteValues.setEmail(request.getParameter("txtEmail"));
+		clienteValues.setCep(request.getParameter("txtCep"));
+		clienteValues.setCpf(request.getParameter("txtCpf"));
 		
-		ClienteDAO dao = new ClienteDAO();
-		dao.insert(clienteValues);
+		ClienteDAO dao;
+		try {
+			dao = new ClienteDAO();
+			if(dao.insert(clienteValues)){
+				out.println("<script>alert('Sucesso ao cadastrar!');</script>");
+			}
+		} catch (ClassNotFoundException e) {
+			out.println(e.getMessage());
+		} catch (SQLException e) {
+
+		}
 		
-		out.println(dao.insert(clienteValues));
 	}
 
 }

@@ -50,10 +50,9 @@ public class ClienteDTO {
 	}
 
 	public void setCep(String cep) {
-		// String new_cep = "";
-		// new_cep = cep.substring(0,5) + "-" + cep.substring(5, 8);
-		// this.cep = new_cep;
-		this.cep = cep;
+		String new_cep = "";
+		new_cep = cep.substring(0,5) + "-" + cep.substring(5, 8);
+		this.cep = new_cep;
 	}
 
 	public String getCpf() {
